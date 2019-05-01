@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var image = new Image();
+        var imageData;
+        image.addEventListener('load', function() {
+            console.dir(image);
+            console.log(image.width);
+            var canvas = document.createElement("canvas");
+            canvas.width = image.width;
+            canvas.height = image.height;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(image, 0, 0);
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            //console.dir(map);
+            //imageData = map.data;
+            console.log(getPixel(imageData, 3, 0));
+        });
+
+        function getPixel(imageData, x, y) {
+            var startIndex_i = x * 4 + y * imageData.width;
+            var endIndex_i = startIndex_i + 4;
+            var pixel_a = imageData.data.slice(startIndex_i, endIndex_i)
+            var pixel_o = {
+                r: pixel_a[0],
+                g: pixel_a[1],
+                b: pixel_a[2],
+                a: pixel_a[3]
+            };
+            return pixel_o;
+            // return imageData.slice(startIndex_i, endIndex_i);
+            // return imageData.slice(startIndex_i, endIndex_i)
+            // return imageData[x * 4 + y * image.width];
+        }
+        image.src = './img/maze.png';
+    </script>
+</body>
+</html>
