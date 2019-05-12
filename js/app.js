@@ -2,6 +2,11 @@
 
     var image = new Image();
     var imageData;
+    var speedX_i = 0;
+    var speedY_i = 0;
+    var pixel_o;
+    var direction_s = 'none';
+
     image.addEventListener('load', function() {
         console.dir(image);
         console.log(image.width);
@@ -13,13 +18,26 @@
         imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         //console.dir(map);
         //imageData = map.data;
-        console.log(getPixel(imageData, 3, 0));
+        //console.log(getPixel(imageData, 3, 0));
+
+        // for(var x = 3, y = 1, i = 0; i < 1; i++) {
+        //     console.log('x: ' + x + ' y: ' + y);
+        //     var startIndex_i = x * 4 + y * imageData.width * 4;
+        //     console.log('startindex: ' + startIndex_i);
+        //     var endIndex_i = startIndex_i + 4;
+        //     console.log(imageData.data.slice(startIndex_i, endIndex_i));
+        //     x++;
+        // }
+
+       
     });
 
     function getPixel(imageData, x, y) {
-        var startIndex_i = x * 4 + y * imageData.width;
+        x = Math.round(x);
+        y = Math.round(y);
+        var startIndex_i = x * 4 + y * imageData.width * 4;
         var endIndex_i = startIndex_i + 4;
-        var pixel_a = imageData.data.slice(startIndex_i, endIndex_i)
+        var pixel_a = imageData.data.slice(startIndex_i, endIndex_i);
         var pixel_o = {
             r: pixel_a[0],
             g: pixel_a[1],
@@ -27,9 +45,6 @@
             a: pixel_a[3]
         };
         return pixel_o;
-        // return imageData.slice(startIndex_i, endIndex_i);
-        // return imageData.slice(startIndex_i, endIndex_i)
-        // return imageData[x * 4 + y * image.width];
     }
     image.src = './img/maze.png';
 
@@ -63,7 +78,10 @@
     var pacMan_o;
     var backgroundContainer_o;
     var maze_o;
+    var rectangle = new PIXI.Graphics();
+    
 
+    
     function spriteSetUp() {
 
         var id = PIXI.loader.resources['./img/pac-man.json'].textures;
@@ -71,8 +89,8 @@
         // Load background.
         maze_o = new PIXI.Sprite(id['maze.png']);
         var backgroundDimensions_o = {
-            x: 200,
-            y: 400
+            x: 164,
+            y: 212
         };
         backgroundContainer_o = background(backgroundDimensions_o, maze_o, 'contain');
         
@@ -80,9 +98,13 @@
         pacMan_o = new PIXI.Sprite(id['pac-man-full.png']);
         pacMan_o.x = 100;
         pacMan_o.y = 100;
+        rectangle.beginFill(0xFFFFFF);
+        rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
+        rectangle.endFill();
         container_o.addChild(pacMan_o);
         stage_o.addChild(backgroundContainer_o);
         stage_o.addChild(container_o);
+        stage_o.addChild(rectangle);
         renderer_o.render(stage_o);
         var imgData = renderer_o.extract.pixels(backgroundContainer_o);
         console.dir(imgData);
@@ -125,47 +147,90 @@
        }
     }// Ett spelobjekt.
    
-    var speed_x = 0;
-    var speed_y = 0;
+    
 
     function update( elapsed ) {
         var delta = elapsed / 1000;
-        pacMan_o.x = pacMan_o.x + speed_x * delta;
-        pacMan_o.y = pacMan_o.y + speed_y * delta;
-        //renderer_o.render(backgroundContainer_o);
-        renderer_o.render(stage_o);
-    }
-    
-    document.addEventListener('keydown', function(e) {
-        console.dir(e);
-        switch(e.keyCode) {
-            case 38: // Up
-                var pixel_o = getPixel(imageData, pacMan_o.x, pacMan_o.y - 1);
-                if(pixel_o.a === 0) {
-                    speed_y = -50;
-                } else {
-                    speed_y = 0;
-                }
-                
+        var nextX_i = pacMan_o.x + speedX_i * delta;
+        var nextY_i = pacMan_o.y + speedY_i * delta;
+        document.getElementById('pac-man-x').innerHTML = pacMan_o.x;
+        document.getElementById('pac-man-y').innerHTML = pacMan_o.y;
+        document.getElementById('speedX_i').innerHTML = speedX_i;
+        document.getElementById('speedY_i').innerHTML = speedY_i;
+        document.getElementById('delta').innerHTML = delta;
+        document.getElementById('sum').innerHTML = nextX_i;
+        //console.log('nextX_i: ' + nextX_i);
+        //console.log('nextY_i: ' + nextY_i);
+        // Depending on which direction Pac-Man is going, we must collision check
+        // the direction.
+        var pixel_o;
+        switch(direction_s) {
+            case 'up':
+                pixel_o = getPixel(imageData, nextX_i + 7, nextY_i);
                 break;
-            case 40: // Down
-                speed_y = 50;
+            case 'down':
+                pixel_o = getPixel(imageData, nextX_i + 7, nextY_i + 14);
                 break;
-            case 39: // Right
-                speed_x = 50;
+            case 'left':
+                pixel_o = getPixel(imageData, nextX_i, nextY_i + 7);
                 break;
-            case 37: // Left
-                speed_x = -50;
+            case 'right':
+                pixel_o = getPixel(imageData, nextX_i + 14, nextY_i + 7);
                 break;
         }
-        console.log('x: ' + pacMan_o.x);
-        console.log('y: ' + pacMan_o.y)
+        
+        if(pixel_o && pixel_o.a === 0) {
+            pacMan_o.x = nextX_i;
+            pacMan_o.y = nextY_i;
+        }
+        //document.getElementById('pac-man-y').innerHTML = Math.round(pacMan_o.y);
+        //document.getElementById('pac-man-x').innerHTML = Math.round(pacMan_o.x);
+        //document.getElementById('pixel').innerHTML = JSON.stringify(getPixel(imageData, pacMan_o.x, pacMan_o.y - 1));
+        //renderer_o.render(backgroundContainer_o);
+        rectangle.beginFill(0xFFFFFF);
+        rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
+        rectangle.endFill();
+        renderer_o.render(stage_o);
+    }
+    var keyIsDown = false;
+    
+    document.addEventListener('keydown', function(e) {
+        
+        if(keyIsDown) {
+            return;
+        }
+        console.log(e.keyCode);
+        keyIsDown = true;
+        //document.getElementById('pac-man-y').innerHTML = Math.round(pacMan_o.y);
+        //document.getElementById('pac-man-x').innerHTML = Math.round(pacMan_o.x);
+        
+        
+        switch(e.keyCode) {
+            case 38: // Up
+                direction_s = 'up';
+                speedY_i = -20;
+                break;
+            case 40: // Down
+                direction_s = 'down';
+                speedY_i = 20;
+                break;
+            case 39: // Right
+                direction_s = 'right';
+                speedX_i = 20;
+                break;
+            case 37: // Left
+                direction_s = 'left';
+                speedX_i = -20;
+                break;
+        }
+        //document.getElementById('pixel').innerHTML = JSON.stringify(pixel_o);
+        //document.getElementById('background-y').innerHTML = Math.round(pacMan_o.y);
+        //document.getElementById('background-x').innerHTML = Math.round(pacMan_o.x);
     });
 
     document.addEventListener('keyup', function(e) {
-        console.dir(e);
-        speed_x = 0;
-        speed_y = 0;
+        keyIsDown = speedX_i = speedY_i = 0;
+        direction_s = 'none';
     });
 
 /*
