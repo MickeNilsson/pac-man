@@ -11,70 +11,70 @@
 },
 "pac-man-down-1.png":
 {
-	"frame": {"x":84,"y":0,"w":14,"h":14},
+	"frame": {"x":60,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-down-2.png":
 {
-	"frame": {"x":98,"y":0,"w":14,"h":14},
+	"frame": {"x":84,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-full.png":
 {
-	"frame": {"x":112,"y":0,"w":14,"h":14},
+	"frame": {"x":48,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-left-1.png":
 {
-	"frame": {"x":0,"y":0,"w":14,"h":14},
+	"frame": {"x":24,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-left-2.png":
 {
-	"frame": {"x":56,"y":0,"w":14,"h":14},
+	"frame": {"x":36,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-right-1.png":
 {
-	"frame": {"x":14,"y":0,"w":14,"h":14},
+	"frame": {"x":12,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-right-2.png":
 {
-	"frame": {"x":42,"y":0,"w":14,"h":14},
+	"frame": {"x":0,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "pac-man-up-1.png":
 {
-	"frame": {"x":28,"y":0,"w":14,"h":14},
+	"frame": {"x":96,"y":0,"w":14,"h":14},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
@@ -83,11 +83,11 @@
 },
 "pac-man-up-2.png":
 {
-	"frame": {"x":70,"y":0,"w":14,"h":14},
+	"frame": {"x":72,"y":0,"w":12,"h":12},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":14,"h":14},
-	"sourceSize": {"w":14,"h":14},
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":12},
+	"sourceSize": {"w":12,"h":12},
 	"pivot": {"x":0.5,"y":0.5}
 }},
 "meta": {
@@ -97,6 +97,6 @@
 	"format": "RGBA8888",
 	"size": {"w":164,"h":226},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:c115d8b2c122b0ab5dcaa4a8b1812925:0d071f35b87c79ff87e2cca3bb88c1ea:7439680aa2dbfe7f4bba8884f11183db$"
+	"smartupdate": "$TexturePacker:SmartUpdate:6316d56db766f3dd82a1cf7c137765ef:6b6edb595c11f9891884bd020789e3eb:7439680aa2dbfe7f4bba8884f11183db$"
 }
 }

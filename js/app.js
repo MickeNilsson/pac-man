@@ -97,7 +97,7 @@
 
         pacMan_o = new PIXI.Sprite(id['pac-man-full.png']);
         pacMan_o.x = 100;
-        pacMan_o.y = 100;
+        pacMan_o.y = 200;
         rectangle.beginFill(0xFFFFFF);
         rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
         rectangle.endFill();
@@ -164,22 +164,134 @@
         // Depending on which direction Pac-Man is going, we must collision check
         // the direction.
         var pixel_o;
+        var pixelsAlpha_a = [];
+        //var movePacMan_b = true;
+        var numOfBlockingPixelsOnLeftHandSide_i = 0;
+        var numOfBlockingPixelsOnRightHandSide_i = 0;
+        var numOfBlockingPixelsOnUpHandSide_i = 0;
+        var numOfBlockingPixelsOnDownHandSide_i = 0;
+        var numOfEmptyPixelsFromTop_i = null;
+        var x, y;
         switch(direction_s) {
             case 'up':
-                pixel_o = getPixel(imageData, nextX_i + 7, nextY_i);
+                for(x = 0; x < 12; x++) {
+                    pixel_o = getPixel(imageData, pacMan_o.x + x, pacMan_o.y);
+                    if(x < 6) {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnLeftHandSide_i++;
+                        }
+                    } else {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnRightHandSide_i++;
+                        }
+                    }
+                }
+                if(numOfBlockingPixelsOnLeftHandSide_i || numOfBlockingPixelsOnRightHandSide_i) {
+                    if(numOfBlockingPixelsOnLeftHandSide_i < numOfBlockingPixelsOnRightHandSide_i) {
+                        pixel_o = getPixel(imageData, pacMan_o.x - 1, pacMan_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.x--;
+                        }
+                    } else {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 12, pacMan_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.x++;
+                        }
+                    }
+                } else {
+                    pacMan_o.y--;
+                }
                 break;
             case 'down':
-                pixel_o = getPixel(imageData, nextX_i + 7, nextY_i + 14);
+                for(var x = 0; x < 12; x++) {
+                    pixel_o = getPixel(imageData, pacMan_o.x + x, pacMan_o.y + 12);
+                    if(x < 6) {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnLeftHandSide_i++;
+                        }
+                    } else {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnRightHandSide_i++;
+                        }
+                    }
+                }
+                if(numOfBlockingPixelsOnLeftHandSide_i || numOfBlockingPixelsOnRightHandSide_i) {
+                    if(numOfBlockingPixelsOnLeftHandSide_i < numOfBlockingPixelsOnRightHandSide_i) {
+                        pixel_o = getPixel(imageData, pacMan_o.x - 1, pacMan_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.x--;
+                        }
+                    } else {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 12, pacMan_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.x++;
+                        }
+                    }
+                } else {
+                    pacMan_o.y++;
+                }
                 break;
             case 'left':
-                pixel_o = getPixel(imageData, nextX_i, nextY_i + 7);
+                for(y = 0; y < 12; y++) {
+                    pixel_o = getPixel(imageData, pacMan_o.x, pacMan_o.y + y);
+                    if(y < 6) {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnUpHandSide_i++;
+                        }
+                    } else {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnDownHandSide_i++;
+                        }
+                    }
+                }
+                if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
+                    if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y - 1);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.y--;
+                        }
+                    } else {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y + 12);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.y++;
+                        }
+                    }
+                } else {
+                    pacMan_o.x--;
+                }
                 break;
             case 'right':
-                pixel_o = getPixel(imageData, nextX_i + 14, nextY_i + 7);
+                for(y = 0; y < 12; y++) {
+                    pixel_o = getPixel(imageData, pacMan_o.x + 12, pacMan_o.y + y);
+                    if(y < 6) {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnUpHandSide_i++;
+                        }
+                    } else {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnDownHandSide_i++;
+                        }
+                    }
+                }
+                if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
+                    if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y - 1);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.y--;
+                        }
+                    } else {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y + 12);
+                        if(pixel_o.a === 0) {
+                            pacMan_o.y++;
+                        }
+                    }
+                } else {
+                    pacMan_o.x++;
+                }
                 break;
         }
         
-        if(pixel_o && pixel_o.a === 0) {
+        if(false/*movePacMan_b/*pixel_o && pixel_o.a === 0*/) {
             pacMan_o.x = nextX_i;
             pacMan_o.y = nextY_i;
         }
@@ -187,9 +299,9 @@
         //document.getElementById('pac-man-x').innerHTML = Math.round(pacMan_o.x);
         //document.getElementById('pixel').innerHTML = JSON.stringify(getPixel(imageData, pacMan_o.x, pacMan_o.y - 1));
         //renderer_o.render(backgroundContainer_o);
-        rectangle.beginFill(0xFFFFFF);
-        rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
-        rectangle.endFill();
+        // rectangle.beginFill(0xFFFFFF);
+        // rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
+        // rectangle.endFill();
         renderer_o.render(stage_o);
     }
     var keyIsDown = false;
