@@ -6,6 +6,11 @@
     var speedY_i = 0;
     var pixel_o;
     var direction_s = 'none';
+    var pacManAnimationFrame_s = 'full';
+    var pacMan_o;
+    var id;
+    var currentFrame_s;
+    var changeFrame_i = 0;
 
     image.addEventListener('load', function() {
         console.dir(image);
@@ -75,7 +80,7 @@
 
     PIXI.loader.add(['./img/pac-man.json']).load(spriteSetUp);
 
-    var pacMan_o;
+    
     var backgroundContainer_o;
     var maze_o;
     var rectangle = new PIXI.Graphics();
@@ -84,7 +89,7 @@
     
     function spriteSetUp() {
 
-        var id = PIXI.loader.resources['./img/pac-man.json'].textures;
+        id = PIXI.loader.resources['./img/pac-man.json'].textures;
 
         // Load background.
         maze_o = new PIXI.Sprite(id['maze.png']);
@@ -158,7 +163,7 @@
         document.getElementById('speedX_i').innerHTML = speedX_i;
         document.getElementById('speedY_i').innerHTML = speedY_i;
         document.getElementById('delta').innerHTML = delta;
-        document.getElementById('sum').innerHTML = nextX_i;
+        document.getElementById('sum').innerHTML = changeFrame_i;
         //console.log('nextX_i: ' + nextX_i);
         //console.log('nextY_i: ' + nextY_i);
         // Depending on which direction Pac-Man is going, we must collision check
@@ -310,6 +315,22 @@
         // rectangle.beginFill(0xFFFFFF);
         // rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
         // rectangle.endFill();
+        
+        if(direction_s !== 'none' && changeFrame_i > 5) {
+            if(currentFrame_s.indexOf('1') !== -1) {
+                currentFrame_s = 'pac-man-' + direction_s + '-2.png';
+            } else if(currentFrame_s.indexOf('2') !== -1) {
+                currentFrame_s = 'pac-man-full.png';
+            } else {
+                currentFrame_s = 'pac-man-' + direction_s + '-1.png';
+            }
+            pacMan_o.setTexture(id[currentFrame_s]);
+            changeFrame_i = 0;
+        }
+        changeFrame_i++;
+        
+
+
         renderer_o.render(stage_o);
     }
     var keyIsDown = false;
@@ -343,6 +364,9 @@
                 speedX_i = -20;
                 break;
         }
+        currentFrame_s = 'pac-man-' + direction_s + '-1.png';
+        pacMan_o.setTexture(id[currentFrame_s]);
+        
         //document.getElementById('pixel').innerHTML = JSON.stringify(pixel_o);
         //document.getElementById('background-y').innerHTML = Math.round(pacMan_o.y);
         //document.getElementById('background-x').innerHTML = Math.round(pacMan_o.x);
