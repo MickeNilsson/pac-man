@@ -158,12 +158,12 @@
         var delta = elapsed / 1000;
         var nextX_i = pacMan_o.x + speedX_i * delta;
         var nextY_i = pacMan_o.y + speedY_i * delta;
-        document.getElementById('pac-man-x').innerHTML = pacMan_o.x;
-        document.getElementById('pac-man-y').innerHTML = pacMan_o.y;
-        document.getElementById('speedX_i').innerHTML = speedX_i;
-        document.getElementById('speedY_i').innerHTML = speedY_i;
-        document.getElementById('delta').innerHTML = delta;
-        document.getElementById('sum').innerHTML = changeFrame_i;
+        // document.getElementById('pac-man-x').innerHTML = pacMan_o.x;
+        // document.getElementById('pac-man-y').innerHTML = pacMan_o.y;
+        // document.getElementById('speedX_i').innerHTML = speedX_i;
+        // document.getElementById('speedY_i').innerHTML = speedY_i;
+        // document.getElementById('delta').innerHTML = delta;
+        // document.getElementById('sum').innerHTML = changeFrame_i;
         //console.log('nextX_i: ' + nextX_i);
         //console.log('nextY_i: ' + nextY_i);
         // Depending on which direction Pac-Man is going, we must collision check
@@ -272,6 +272,9 @@
                 }
                 break;
             case 'right':
+                if(pacMan_o.x > 250) {
+                    console.log('right');
+                }
                 for(y = 0; y < 12; y++) {
                     pixel_o = getPixel(imageData, pacMan_o.x + 12, pacMan_o.y + y);
                     if(y < 6) {
@@ -324,7 +327,8 @@
             } else {
                 currentFrame_s = 'pac-man-' + direction_s + '-1.png';
             }
-            pacMan_o.setTexture(id[currentFrame_s]);
+            //pacMan_o.setTexture(id[currentFrame_s]);
+            pacMan_o.texture = id[currentFrame_s];
             changeFrame_i = 0;
         }
         changeFrame_i++;
@@ -365,7 +369,8 @@
                 break;
         }
         currentFrame_s = 'pac-man-' + direction_s + '-1.png';
-        pacMan_o.setTexture(id[currentFrame_s]);
+        //pacMan_o.setTexture(id[currentFrame_s]);
+        pacMan_o.texture = id[currentFrame_s];
         
         //document.getElementById('pixel').innerHTML = JSON.stringify(pixel_o);
         //document.getElementById('background-y').innerHTML = Math.round(pacMan_o.y);
