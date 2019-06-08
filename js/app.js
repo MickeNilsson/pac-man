@@ -241,69 +241,75 @@
                 }
                 break;
             case 'left':
-                for(y = 0; y < 12; y++) {
-                    pixel_o = getPixel(imageData, pacMan_o.x, pacMan_o.y + y);
-                    if(y < 6) {
-                        if(pixel_o.a !== 0) {
-                            numOfBlockingPixelsOnUpHandSide_i++;
-                        }
-                    } else {
-                        if(pixel_o.a !== 0) {
-                            numOfBlockingPixelsOnDownHandSide_i++;
-                        }
-                    }
-                }
-                if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
-                    if(numOfBlockingPixelsOnUpHandSide_i + numOfBlockingPixelsOnDownHandSide_i < 12) {
-                        if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
-                            pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y - 1);
-                            if(pixel_o.a === 0) {
-                                pacMan_o.y--;
+                if(pacMan_o.x < 5) {
+                    pacMan_o.x = 150;
+                } else {
+                    for(y = 0; y < 12; y++) {
+                        pixel_o = getPixel(imageData, pacMan_o.x, pacMan_o.y + y);
+                        if(y < 6) {
+                            if(pixel_o.a !== 0) {
+                                numOfBlockingPixelsOnUpHandSide_i++;
                             }
                         } else {
-                            pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y + 12);
-                            if(pixel_o.a === 0) {
-                                pacMan_o.y++;
+                            if(pixel_o.a !== 0) {
+                                numOfBlockingPixelsOnDownHandSide_i++;
                             }
                         }
                     }
-                } else {
-                    pacMan_o.x--;
+                    if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
+                        if(numOfBlockingPixelsOnUpHandSide_i + numOfBlockingPixelsOnDownHandSide_i < 12) {
+                            if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
+                                pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y - 1);
+                                if(pixel_o.a === 0) {
+                                    pacMan_o.y--;
+                                }
+                            } else {
+                                pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y + 12);
+                                if(pixel_o.a === 0) {
+                                    pacMan_o.y++;
+                                }
+                            }
+                        }
+                    } else {
+                        pacMan_o.x--;
+                    }
                 }
                 break;
             case 'right':
-                if(pacMan_o.x > 250) {
-                    console.log('right');
-                }
-                for(y = 0; y < 12; y++) {
-                    pixel_o = getPixel(imageData, pacMan_o.x + 12, pacMan_o.y + y);
-                    if(y < 6) {
-                        if(pixel_o.a !== 0) {
-                            numOfBlockingPixelsOnUpHandSide_i++;
-                        }
-                    } else {
-                        if(pixel_o.a !== 0) {
-                            numOfBlockingPixelsOnDownHandSide_i++;
-                        }
-                    }
-                }
-                if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
-                    if(numOfBlockingPixelsOnUpHandSide_i + numOfBlockingPixelsOnDownHandSide_i < 12) {
-                        if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
-                            pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y - 1);
-                            if(pixel_o.a === 0) {
-                                pacMan_o.y--;
+                if(pacMan_o.x > 152) {
+                    pacMan_o.x = 0;
+                } else {
+                    for(y = 0; y < 12; y++) {
+                        pixel_o = getPixel(imageData, pacMan_o.x + 12, pacMan_o.y + y);
+                        if(y < 6) {
+                            if(pixel_o.a !== 0) {
+                                numOfBlockingPixelsOnUpHandSide_i++;
                             }
                         } else {
-                            pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y + 12);
-                            if(pixel_o.a === 0) {
-                                pacMan_o.y++;
+                            if(pixel_o.a !== 0) {
+                                numOfBlockingPixelsOnDownHandSide_i++;
                             }
                         }
                     }
-                } else {
-                    pacMan_o.x++;
+                    if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
+                        if(numOfBlockingPixelsOnUpHandSide_i + numOfBlockingPixelsOnDownHandSide_i < 12) {
+                            if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
+                                pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y - 1);
+                                if(pixel_o.a === 0) {
+                                    pacMan_o.y--;
+                                }
+                            } else {
+                                pixel_o = getPixel(imageData, pacMan_o.x + 5, pacMan_o.y + 12);
+                                if(pixel_o.a === 0) {
+                                    pacMan_o.y++;
+                                }
+                            }
+                        }
+                    } else {
+                        pacMan_o.x++;
+                    }
                 }
+                
                 break;
         }
         
