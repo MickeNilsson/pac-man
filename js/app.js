@@ -8,6 +8,7 @@
     var direction_s = 'none';
     var pacManAnimationFrame_s = 'full';
     var pacMan_o;
+    var coins_ao = [];
     var id;
     var currentFrame_s;
     var changeFrame_i = 0;
@@ -99,7 +100,7 @@
         };
         backgroundContainer_o = background(backgroundDimensions_o, maze_o, 'contain');
         
-
+        placeCoins();
         pacMan_o = new PIXI.Sprite(id['pac-man-full.png']);
         pacMan_o.x = 100;
         pacMan_o.y = 200;
@@ -152,7 +153,32 @@
        }
     }// Ett spelobjekt.
    
-    
+    function placeCoins() {
+        var dist = 8;
+        var numOfCoins_i = 0;
+        var x, y, pixel_o;
+        var startY_i = 9;
+        var startX_i = 9;
+        var numOfCoinsY_i = 25;
+        var numOfCoins_X_i = 19;
+        for(y = startY_i; y < 205; y += dist) {
+            for(x = startX_i; x < 160; x += dist) {
+                pixel_o = getPixel(imageData, x, y);
+                if(pixel_o.a === 0) {
+                    numOfCoins_i++;
+                    placeCoinAt(x, y);
+                }
+            }
+        }
+        console.log('numOfCoins_i: ' + numOfCoins_i);
+        function placeCoinAt(x, y) {
+            var coin_o = new PIXI.Sprite(id['coin.png']);
+            coin_o.x = x;
+            coin_o.y = y;
+            coins_ao.push(coin_o);
+            stage_o.addChild(coin_o);
+        }
+    }
 
     function update( elapsed ) {
         var delta = elapsed / 1000;
@@ -241,7 +267,7 @@
                 }
                 break;
             case 'left':
-                if(pacMan_o.x < 5) {
+                if(pacMan_o.x < 2) {
                     pacMan_o.x = 150;
                 } else {
                     for(y = 0; y < 12; y++) {
@@ -339,7 +365,13 @@
         }
         changeFrame_i++;
         
-
+        for(var i = 0; i < coins_ao.length; i++) {
+            var distance_f = Math.sqrt(Math.pow((pacMan_o.x + 6 - coins_ao[i].x), 2)
+                           + Math.pow((pacMan_o.y + 6 - coins_ao[i].y), 2));
+            if(distance_f < 6) {
+                coins_ao[i].texture = null;
+            }
+        }
 
         renderer_o.render(stage_o);
     }
