@@ -8,6 +8,9 @@
     var direction_s = 'none';
     var pacManAnimationFrame_s = 'full';
     var pacMan_o;
+    var ghost_o;
+    var ghosts_ao = [];
+    ghosts_ao.colors = ['red', 'purple', 'blue', 'orange'];
     var coins_ao = [];
     var id;
     var currentFrame_s;
@@ -101,13 +104,28 @@
         backgroundContainer_o = background(backgroundDimensions_o, maze_o, 'contain');
         
         placeCoins();
+
+        for(var i = 0; i < 4; i++) {
+            var color = ghosts_ao.colors[i];
+            ghosts_ao.push(createGhost(color));
+        }
+        function createGhost(color) {
+            var ghost_o = new PIXI.Sprite(id[color + '-ghost-up-1.png']);
+            ghost_o.isBlocked_b = false;
+            ghost_o.direction_s = 'up';
+            ghost_o.currentFrame_s = color + '-ghost-up-1.png';
+            ghost_o.changeFrame_i = 0;
+            ghost_o.x = 100;
+            ghost_o.y = 100;
+            ghost_o.color_s = color;
+            container_o.addChild(ghost_o);
+            return ghost_o;
+        }
         pacMan_o = new PIXI.Sprite(id['pac-man-full.png']);
         pacMan_o.x = 100;
-        pacMan_o.y = 200;
-        rectangle.beginFill(0xFFFFFF);
-        rectangle.drawRect(pacMan_o.x, pacMan_o.y, 2, 2);
-        rectangle.endFill();
+        pacMan_o.y = 100;
         container_o.addChild(pacMan_o);
+        
         stage_o.addChild(backgroundContainer_o);
         stage_o.addChild(container_o);
         stage_o.addChild(rectangle);
@@ -170,7 +188,7 @@
                 }
             }
         }
-        console.log('numOfCoins_i: ' + numOfCoins_i);
+       ;
         function placeCoinAt(x, y) {
             var coin_o = new PIXI.Sprite(id['coin.png']);
             coin_o.x = x;
@@ -339,6 +357,26 @@
                 break;
         }
         
+        for(var i = 0; i < 4; i++) {
+            var ghost_o = ghosts_ao[i];
+            move(ghost_o);
+            if(ghost_o.isBlocked_b) {
+                var directions_a = ['up', 'down', 'left', 'right'];
+                ghost_o.direction_s = directions_a[Math.floor(Math.random() * 10 % 4)];
+                ghost_o.isBlocked_b = false;
+            }
+            if(ghost_o.changeFrame_i++ > 5) {
+                if(ghost_o.currentFrame_s.indexOf('1') !== -1) {
+                    ghost_o.currentFrame_s = ghost_o.color_s + '-ghost-' + ghost_o.direction_s + '-2.png';
+                } else {
+                    ghost_o.currentFrame_s = ghost_o.color_s + '-ghost-' + ghost_o.direction_s + '-1.png';
+                }
+                ghost_o.texture = id[ghost_o.currentFrame_s];
+                ghost_o.changeFrame_i = 0;
+            }
+        }
+        
+    
         if(false/*movePacMan_b/*pixel_o && pixel_o.a === 0*/) {
             pacMan_o.x = nextX_i;
             pacMan_o.y = nextY_i;
@@ -370,6 +408,7 @@
                            + Math.pow((pacMan_o.y + 6 - coins_ao[i].y), 2));
             if(distance_f < 6) {
                 coins_ao[i].texture = null;
+                coins_ao.splice(i, 1);
             }
         }
 
@@ -457,6 +496,159 @@ function background(bgSize, inputSprite, type, forceSize) {
     sprite.position = pos;
 
     return bgContainer;
+}
+
+
+
+function move(sprite_o) {
+    var pixel_o,
+        numOfBlockingPixelsOnLeftHandSide_i = 0,
+        numOfBlockingPixelsOnRightHandSide_i = 0,
+        numOfBlockingPixelsOnUpHandSide_i = 0,
+        numOfBlockingPixelsOnDownHandSide_i = 0;
+    switch(sprite_o.direction_s) {
+        case 'up':
+            for(x = 0; x < 12; x++) {
+                pixel_o = getPixel(imageData, sprite_o.x + x, sprite_o.y);
+                if(x < 6) {
+                    if(pixel_o.a !== 0) {
+                        numOfBlockingPixelsOnLeftHandSide_i++;
+                    }
+                } else {
+                    if(pixel_o.a !== 0) {
+                        numOfBlockingPixelsOnRightHandSide_i++;
+                    }
+                }
+            }
+            if(numOfBlockingPixelsOnLeftHandSide_i || numOfBlockingPixelsOnRightHandSide_i) {
+                if(numOfBlockingPixelsOnLeftHandSide_i + numOfBlockingPixelsOnRightHandSide_i < 12) {
+                    if(numOfBlockingPixelsOnLeftHandSide_i < numOfBlockingPixelsOnRightHandSide_i) {
+                        pixel_o = getPixel(imageData, sprite_o.x - 1, sprite_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            sprite_o.x--;
+                        }
+                    } else {
+                        pixel_o = getPixel(imageData, sprite_o.x + 12, sprite_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            sprite_o.x++;
+                        }
+                    }
+                } else {
+                    // The sprite is blocked.
+                    sprite_o.isBlocked_b = true;
+                }
+            } else {
+                sprite_o.y--;
+            }
+            break;
+        case 'down':
+            for(var x = 0; x < 12; x++) {
+                pixel_o = getPixel(imageData, sprite_o.x + x, sprite_o.y + 12);
+                if(x < 6) {
+                    if(pixel_o.a !== 0) {
+                        numOfBlockingPixelsOnLeftHandSide_i++;
+                    }
+                } else {
+                    if(pixel_o.a !== 0) {
+                        numOfBlockingPixelsOnRightHandSide_i++;
+                    }
+                }
+            }
+            if(numOfBlockingPixelsOnLeftHandSide_i || numOfBlockingPixelsOnRightHandSide_i) {
+                if(numOfBlockingPixelsOnLeftHandSide_i + numOfBlockingPixelsOnRightHandSide_i < 12) {
+                    if(numOfBlockingPixelsOnLeftHandSide_i < numOfBlockingPixelsOnRightHandSide_i) {
+                        pixel_o = getPixel(imageData, sprite_o.x - 1, sprite_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            sprite_o.x--;
+                        }
+                    } else {
+                        pixel_o = getPixel(imageData, sprite_o.x + 12, sprite_o.y + 5);
+                        if(pixel_o.a === 0) {
+                            sprite_o.x++;
+                        }
+                    }
+                } else {
+                    sprite_o.isBlocked_b = true;
+                }
+            } else {
+                sprite_o.y++;
+            }
+            break;
+        case 'left':
+            if(sprite_o.x < 2) {
+                sprite_o.x = 150;
+            } else {
+                for(y = 0; y < 12; y++) {
+                    pixel_o = getPixel(imageData, sprite_o.x, sprite_o.y + y);
+                    if(y < 6) {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnUpHandSide_i++;
+                        }
+                    } else {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnDownHandSide_i++;
+                        }
+                    }
+                }
+                if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
+                    if(numOfBlockingPixelsOnUpHandSide_i + numOfBlockingPixelsOnDownHandSide_i < 12) {
+                        if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
+                            pixel_o = getPixel(imageData, sprite_o.x + 5, sprite_o.y - 1);
+                            if(pixel_o.a === 0) {
+                                sprite_o.y--;
+                            }
+                        } else {
+                            pixel_o = getPixel(imageData, sprite_o.x + 5, sprite_o.y + 12);
+                            if(pixel_o.a === 0) {
+                                sprite_o.y++;
+                            }
+                        }
+                    } else {
+                        sprite_o.isBlocked_b = true;
+                    }
+                } else {
+                    sprite_o.x--;
+                }
+            }
+            break;
+        case 'right':
+            if(sprite_o.x > 152) {
+                sprite_o.x = 0;
+            } else {
+                for(y = 0; y < 12; y++) {
+                    pixel_o = getPixel(imageData, sprite_o.x + 12, sprite_o.y + y);
+                    if(y < 6) {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnUpHandSide_i++;
+                        }
+                    } else {
+                        if(pixel_o.a !== 0) {
+                            numOfBlockingPixelsOnDownHandSide_i++;
+                        }
+                    }
+                }
+                if(numOfBlockingPixelsOnUpHandSide_i || numOfBlockingPixelsOnDownHandSide_i) {
+                    if(numOfBlockingPixelsOnUpHandSide_i + numOfBlockingPixelsOnDownHandSide_i < 12) {
+                        if(numOfBlockingPixelsOnUpHandSide_i < numOfBlockingPixelsOnDownHandSide_i) {
+                            pixel_o = getPixel(imageData, sprite_o.x + 5, sprite_o.y - 1);
+                            if(pixel_o.a === 0) {
+                                sprite_o.y--;
+                            }
+                        } else {
+                            pixel_o = getPixel(imageData, sprite_o.x + 5, sprite_o.y + 12);
+                            if(pixel_o.a === 0) {
+                                sprite_o.y++;
+                            }
+                        }
+                    } else {
+                        sprite_o.isBlocked_b = true;
+                    }
+                } else {
+                    sprite_o.x++;
+                }
+            }
+            break;
+    }   
 }
 
 }());
