@@ -1,5 +1,6 @@
 (function(){
 
+    // Sound effect from https://freesound.org/people/InspectorJ/sounds/411642/
     var image = new Image();
     var imageData;
     var speedX_i = 0;
@@ -122,7 +123,7 @@
             return ghost_o;
         }
         pacMan_o = new PIXI.Sprite(id['pac-man-full.png']);
-        pacMan_o.x = 100;
+        pacMan_o.x = 10;
         pacMan_o.y = 100;
         container_o.addChild(pacMan_o);
         
@@ -407,8 +408,21 @@
             var distance_f = Math.sqrt(Math.pow((pacMan_o.x + 6 - coins_ao[i].x), 2)
                            + Math.pow((pacMan_o.y + 6 - coins_ao[i].y), 2));
             if(distance_f < 6) {
+                document.getElementById('sound').pause();
+                document.getElementById('sound').currentTime = 0;
+                document.getElementById('sound').play();
                 coins_ao[i].texture = null;
                 coins_ao.splice(i, 1);
+            }
+        }
+
+        // Check collision with ghosts.
+        for(i = 0; i < ghosts_ao.length; i++) {
+            var distance_f = Math.sqrt(Math.pow((pacMan_o.x + 6 - (ghosts_ao[i].x + 6)), 2)
+                           + Math.pow((pacMan_o.y + 6 - (ghosts_ao[i].y + 6)), 2));
+            if(distance_f < 12) {
+                pacMan_o.x = 10;
+                pacMan_o.y = 100;
             }
         }
 
